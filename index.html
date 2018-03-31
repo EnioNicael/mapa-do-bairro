@@ -3,32 +3,44 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <style type="text/css">
-      html, body { height: 100%; margin: 0; padding: 0; }
-      #map { height: 100%; }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 
     <title>Mapa do bairro</title>
   </head>
   <body>
-    <!-- local onde o mapa sera inserido -->
-    <div id="map">
-    </div>
+    <!-- <div class="container"> -->
+    <header class="header">
+      <a id="menu">
+      <!-- <a id="drawer" data-bind="click: show-nav"> -->
+        <img src="img/hamburger100x100.png">
+      </a>
+      <p>GUIA PARA PASSEIO NA RESERVA INDIGENA</p>
+    </header>
 
-    <script>
-      var map;
-      // Cria o mapa, modelo developers.google.com/maps/documentation
-      function initMap(){
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -21.128627, lng: -56.492892},
-          zoom: 15
-        });
-      }
-    </script>
+    <nav id="drawer">
+      <h1>Filtros de busca</h1>
+
+      <select data-bind="options: locations, optionsText: 'title'"></select>
+      <button>Filtrar</button>
+
+      <div class="locations">
+        <ul data-bind="foreach: locations">
+          <li><span data-bind="text: title"</li>
+        </ul>
+      </div>
+    </nav>
+
+      <!-- local reservado para exibição do mapa -->
+
     <!-- Location: -22.229462,-54.844561 -->
+    <main id="map">
+    <!-- <main id="map" data-bind="click: hidden-nav"> -->
 
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBK2h3f9AligkZqS2Jt0V1AyRUMBzTxE_w&v=3&callback=initMap">
-    </script>
+    </main>
+
+    <script src="js/knockout-3.4.2.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=drawing&key=AIzaSyBK2h3f9AligkZqS2Jt0V1AyRUMBzTxE_w&v=3&callback=initMap"></script>
+    <script src="js/main.js"></script>
+
   </body>
 </html>
