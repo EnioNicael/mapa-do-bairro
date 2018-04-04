@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
 
     <title>Mapa do bairro</title>
   </head>
@@ -18,14 +19,17 @@
     </header>
 
     <nav id="drawer">
-      <h1>Filtros de busca</h1>
+      <h1 class="h1">Filtros de busca</h1>
 
-      <select data-bind="options: locations, optionsText: 'title'"></select>
-      <button>Filtrar</button>
+      <div class="form-group">
+        <select class="form-control" data-bind="options: locations, optionsText: 'title'"></select>
+        <button class="btn btn-primary">Filtrar</button>
+      </div>
 
-      <div class="locations">
-        <ul data-bind="foreach: locations">
-          <li><span data-bind="text: title"</li>
+
+      <div class="">
+        <ul class="list-group" data-bind="foreach: locations">
+          <li class="list-group-item"><span data-bind="text: title"</li>
         </ul>
       </div>
     </nav>
