@@ -57,14 +57,14 @@ var locations = [
 var Location = function(data, marker) {
   this.title = ko.observable(data.title);
   this.location = ko.observable(data.location);
-  this.marker = marker;
+  this.marker = ko.observable(marker);
 };
 
 var ViewModel = function(locations, map){
 
   // this.defaultIcon = this.makeMarkerIcon('0091ff');
   // this.highlightedIcon = this.makeMarkerIcon('FFFF24');
-  this.largeInfowindow = new google.maps.InfoWindow();
+  // this.largeInfowindow = new google.maps.InfoWindow();
 
   this.locationList = ko.observableArray([]); // lista dos locais
   this.locationMarkers = ko.observableArray([]); // lista de marcadores dos locais
@@ -75,20 +75,9 @@ var ViewModel = function(locations, map){
       position: locations[i].location,
       title: locations[i].title,
       map: map,
-      animation: google.maps.Animation.DROP,
-      icon: this.defaultIcon,
-      id: i
-    });
-    // color
-    this.locationMarkers()[i].addListener('mouseover', function() {
-      this.setIcon(this.highlightedIcon);
-    });
-    this.locationMarkers()[i].addListener('mouseout', function() {
-      this.setIcon(this.defaultIcon);
-    });
-    // infowindow
-    this.locationMarkers()[i].addListener('click', function(){
-      populateInfoWindow(this, largeInfowindow);
+      animation: google.maps.Animation.DROP
+      // icon: this.defaultIcon,
+      // id: i
     });
   }
   // popula o array com a lista dos locais
@@ -97,16 +86,18 @@ var ViewModel = function(locations, map){
   }
 
   this.showListings = function() {
-    var bounds = new google.maps.LatLngBounds();
+    // var bounds = new google.maps.LatLngBounds();
 
     for (var i = 0; i < this.locationList().length; i++) {
       this.locationList()[i].marker.setMap(map);
-      bounds.extend(this.locationList()[i].marker.position);
+      // bounds.extend(this.locationList()[i].marker.position);
       console.log('locationList: ' + this.locationList()[i].marker.title);
     }
 
-    map.fitBounds(bounds);
+    // map.fitBounds(bounds);
   };
+
+/*
 
   // eventos
   this.makeMarkerIcon = function(markerColor) {
@@ -136,7 +127,7 @@ var ViewModel = function(locations, map){
     if (true) {
 
     }
-  };
+  }; */
 }
 
 var initMap = function(){

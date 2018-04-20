@@ -4,45 +4,44 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
 
     <title>Mapa do bairro</title>
   </head>
   <body>
-    <!-- <div class="container"> -->
-    <header class="header">
-      <a id="menu">
-      <!-- <a id="drawer" data-bind="click: show-nav"> -->
-        <img src="img/hamburger100x100.png">
-      </a>
-      <p>GUIA PARA PASSEIO NA RESERVA INDIGENA</p>
-    </header>
 
-    <nav id="drawer">
-      <h1 class="h1">Filtros de busca</h1>
+    <!-- NAVBAR -->
+      <nav class="navbar navbar-dark bg-dark navbar-expand-md">
+          <a href="#" class="navbar-brand text-white">Filtrar</a>
 
-      <div class="form-group">
-        <select class="form-control" data-bind="options: locations, optionsText: 'title'"></select>
-        <button class="btn btn-primary">Filtrar</button>
-      </div>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#filtro">
+            <span class="navbar-toggler-icon"></span>
+          </button>
 
+          <div class="collapse navbar-collapse" id="filtro">
+            <div class="dropdown">
+              <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Locais
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenu" data-bind="foreach: locationlist">
+                <button class="dropdown-item" type="button" data-bind="text: title"></button>
+              </div>
+            </div>
+          </div>
 
-      <div class="">
-        <ul class="list-group" data-bind="foreach: locations">
-          <li class="list-group-item"><span data-bind="text: title"</li>
-        </ul>
-      </div>
-    </nav>
+      </nav>
 
-      <!-- local reservado para exibição do mapa -->
+      <main id="map"></main>
 
-    <!-- Location: -22.229462,-54.844561 -->
-    <main id="map">
-    <!-- <main id="map" data-bind="click: hidden-nav"> -->
-
-    </main>
-
+     <!-- bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+     <!-- Knockout -->
     <script src="js/knockout-3.4.2.js"></script>
+     <!-- Google Maps API -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=drawing&key=AIzaSyBK2h3f9AligkZqS2Jt0V1AyRUMBzTxE_w&v=3&callback=initMap"></script>
     <script src="js/main.js"></script>
 
