@@ -54,10 +54,18 @@ var locations = [
 
 // var markers = [];
 
-var Location = function(data, marker) {
-  this.title = ko.observable(data.title);
+var Location = function(data, map) {
+  this.name = ko.observable(data.title);
   this.location = ko.observable(data.location);
-  this.marker = ko.observable(marker);
+  this.marker = ko.observable(new google.maps.Marker({
+    position: data.location,
+    title: data.title,
+    map: map,
+    animation: google.maps.Animation.DROP
+    // icon: this.defaultIcon,
+    // id: i
+  })
+  );
 };
 
 var ViewModel = function(locations, map){
@@ -70,32 +78,46 @@ var ViewModel = function(locations, map){
   this.locationMarkers = ko.observableArray([]); // lista de marcadores dos locais
 
   // popula o array com os marcadores dos locais
-  for (var i = 0; i < locations.length; i++) {
-    this.locationMarkers()[i] = new google.maps.Marker({
-      position: locations[i].location,
-      title: locations[i].title,
-      map: map,
-      animation: google.maps.Animation.DROP
+  // for (var i = 0; i < locations.length; i++) {
+  //   this.locationMarkers()[i] = new google.maps.Marker({
+  //     position: locations[i].location,
+  //     title: locations[i].title,
+  //     map: map,
+  //     animation: google.maps.Animation.DROP
       // icon: this.defaultIcon,
       // id: i
-    });
-  }
+  //   });
+  // }
+
+
   // popula o array com a lista dos locais
   for (var i = 0; i < locations.length; i++) {
-    this.locationList()[i] = new Location(locations[i], this.locationMarkers()[i]);
+    this.locationList()[i] = new Location(locations[i], map);
+    console.log('locationList: ' + this.locationList()[i].name());
   }
 
-  this.showListings = function() {
+  // locations.forEach(function(){
+  //   this.locationList.push('Ola');
+  // });
+
+  // console.log('locationList: '+this.locationList()[0].location().lat);
+
+
+  // for (var i = 0; i < locations.length; i++) {
+  //   this.locationList()[i] = new Location(locations[i], this.locationMarkers()[i]);
+  // }
+
+  // this.showListings = function() {
     // var bounds = new google.maps.LatLngBounds();
 
-    for (var i = 0; i < this.locationList().length; i++) {
-      this.locationList()[i].marker.setMap(map);
+    // for (var i = 0; i < this.locationList().length; i++) {
+    //   this.locationList()[i].marker.setMap(map);
       // bounds.extend(this.locationList()[i].marker.position);
-      console.log('locationList: ' + this.locationList()[i].marker.title);
-    }
+      // console.log('locationList: ' + this.locationList()[i].marker.title);
+    // }
 
     // map.fitBounds(bounds);
-  };
+  // };
 
 /*
 

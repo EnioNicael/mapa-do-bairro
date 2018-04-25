@@ -11,29 +11,38 @@
     <title>Mapa do bairro</title>
   </head>
   <body>
+    <div class="container-fluid container-custom">
 
     <!-- NAVBAR -->
-      <nav class="navbar navbar-dark bg-dark navbar-expand-md">
-          <a href="#" class="navbar-brand text-white">Filtrar</a>
+    <!-- <div class="row nav-height"> -->
+      <div class="row nav-height">
 
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#filtro">
-            <span class="navbar-toggler-icon"></span>
-          </button>
 
-          <div class="collapse navbar-collapse" id="filtro">
-            <div class="dropdown">
-              <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Locais
-              </button>
-              <div class="dropdown-menu" aria-labelledby="dropdownMenu" data-bind="foreach: locationlist">
-                <button class="dropdown-item" type="button" data-bind="text: title"></button>
+        <nav class="navbar navbar-dark bg-dark navbar-expand-md padding-custom col-12">
+
+            <a href="#" class="navbar-brand text-white">Filtrar</a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#filtro">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="filtro">
+              <div class="dropdown">
+                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Locais
+                </button>
+                <!-- <div class="dropdown-menu" aria-labelledby="dropdownMenu" data-bind="foreach: locations"> -->
+                <div class="dropdown-menu" aria-labelledby="dropdownMenu" data-bind="foreach: locationList">
+                  <button class="dropdown-item" type="button" data-bind="text: name"></button>
+                </div>
               </div>
             </div>
-          </div>
 
-      </nav>
-
-      <main id="map"></main>
+        </nav>
+    </div>
+    <div class="row map-height">
+      <main id="map" class="col-12" ></main>
+    </div>
 
      <!-- bootstrap -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
