@@ -4,7 +4,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style.css">
-    <!-- <link rel="stylesheet" href="css/bootstrap.min.css"> -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 
@@ -14,9 +13,7 @@
     <div class="container-fluid container-custom">
 
     <!-- NAVBAR -->
-    <!-- <div class="row nav-height"> -->
       <div class="row nav-height">
-
 
         <nav class="navbar navbar-dark bg-dark navbar-expand-md padding-custom col-12">
 
@@ -34,12 +31,14 @@
                 <!-- <div class="dropdown-menu" aria-labelledby="dropdownMenu" data-bind="foreach: locations"> -->
                 <div class="dropdown-menu" aria-labelledby="dropdownMenu" data-bind="foreach: locationList">
                   <button class="dropdown-item" type="button" data-bind="text: name"></button>
+                  <!-- <button class="dropdown-item" type="button" data-bind="text: name, click: filterMarkers"></button> -->
                 </div>
               </div>
             </div>
 
         </nav>
     </div>
+    
     <div class="row map-height">
       <main id="map" class="col-12" ></main>
     </div>
@@ -52,6 +51,7 @@
     <script src="js/knockout-3.4.2.js"></script>
      <!-- Google Maps API -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=drawing&key=AIzaSyBK2h3f9AligkZqS2Jt0V1AyRUMBzTxE_w&v=3&callback=initMap"></script>
+    <script src="js/jquery.min.js"></script>
     <script src="js/main.js"></script>
 
   </body>

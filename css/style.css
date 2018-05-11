@@ -6,18 +6,19 @@ html, body {
   height: 100%;
  }
 
- .container-custom {
-   height: 100%;
-   /* width: 100%; */
- }
- .map-height {
-   height: 85%;
- }
- .nav-height {
-   height: 15%;
- }
+.container-custom {
+  height: 100%;
+}
 
- .padding-custom {
-   padding-left: 0;
-   padding-right: 0;
- }
+.map-height {
+  height: 85%;
+}
+
+.nav-height {
+  height: 15%;
+}
+
+.padding-custom {
+  padding-left: 0;
+  padding-right: 0;
+}
