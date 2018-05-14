@@ -5,45 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
-
     <title>Mapa do bairro</title>
   </head>
   <body>
     <div class="container-fluid container-custom">
-
     <!-- NAVBAR -->
       <div class="row nav-height">
-
         <nav class="navbar navbar-dark bg-dark navbar-expand-md padding-custom col-12">
-
-            <a href="#" class="navbar-brand text-white">Filtrar</a>
-
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#filtro">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="filtro">
-              <div class="dropdown">
-                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Locais
-                </button>
-                <!-- <div class="dropdown-menu" aria-labelledby="dropdownMenu" data-bind="foreach: locations"> -->
-                <div class="dropdown-menu" aria-labelledby="dropdownMenu" data-bind="foreach: locationList">
-                  <button class="dropdown-item" type="button" data-bind="text: name"></button>
-                  <!-- <button class="dropdown-item" type="button" data-bind="text: name, click: filterMarkers"></button> -->
-                </div>
+          <a href="#" class="navbar-brand text-white">Filtrar</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#filtro">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="filtro">
+            <div class="dropdown">
+              <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Locais
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenu" data-bind="foreach: locationList">
+                <button class="dropdown-item" type="button" data-bind="text: name, click: $parent.filterMarkers"></button>
               </div>
             </div>
-
+          </div>
         </nav>
     </div>
-    
+    <!-- Google Maps -->
     <div class="row map-height">
       <main id="map" class="col-12" ></main>
     </div>
-
-     <!-- bootstrap -->
+     <!-- Bootstrap -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
@@ -51,8 +40,8 @@
     <script src="js/knockout-3.4.2.js"></script>
      <!-- Google Maps API -->
     <script async defer src="https://maps.googleapis.com/maps/api/js?libraries=drawing&key=AIzaSyBK2h3f9AligkZqS2Jt0V1AyRUMBzTxE_w&v=3&callback=initMap"></script>
+    <!-- Scripts -->
     <script src="js/jquery.min.js"></script>
     <script src="js/main.js"></script>
-
   </body>
 </html>
