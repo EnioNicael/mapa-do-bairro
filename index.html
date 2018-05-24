@@ -17,18 +17,36 @@
           </button>
 
           <div class="collapse navbar-collapse" id="filtro">
+
+            <!-- <form class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" data-bind="value: query, valueUpdate: 'keyup'">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <div class="dropdown-menu" data-bind="foreach: filter">
+              <a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModalCenter" data-bind="text: name, click: $parent.filterMarkers"></a>
+            </div> -->
+
             <div class="input-group">
               <input placeholder="Search…" type="search" class="form-control" aria-label="Text input with segmented dropdown button" data-bind="value: query, valueUpdate: 'keyup'" autocomplete="off">
               <div class="input-group-append">
                 <button type="button" class="btn btn-success dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <span class="sr-only">Toggle Dropdown</span>
                 </button>
-                <!-- preenche a lista em um menu dropdown-->
+                <!-- preenche a lista em um menu dropdown -->
+
+
+
                 <div class="dropdown-menu" data-bind="foreach: filter">
                   <a class="dropdown-item" href="#" data-toggle="modal" data-target="#exampleModalCenter" data-bind="text: name, click: $parent.filterMarkers"></a>
                 </div>
+
+
+
               </div>
             </div>
+
+
+
           </div>
           <!-- Mostra as Informações sobre o local em um modal -->
           <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

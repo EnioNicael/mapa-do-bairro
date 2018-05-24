@@ -114,6 +114,8 @@ var ViewModel = function(locations, map){
 
     map.fitBounds(bounds);
   };
+
+  // teste();
 }
 // Inicia o mapa
 var initMap = function(){
@@ -129,6 +131,9 @@ var initMap = function(){
     zoom: 15
   });
 
+  var viewModel = new ViewModel(locations, map);
+  ko.applyBindings(viewModel);
+
   for (var i = 0; i < locations.length; i++) {
     var marker = new google.maps.Marker({
       position: locations[i].location,
@@ -143,7 +148,7 @@ var initMap = function(){
     bounds.extend(marker.position);
     // Eventos
     marker.addListener('click', function(){
-      // ViewModel.filterMarkers();
+      viewModel.filterMarkers();
       // populateInfoWindow(this, largeInfowindow);
     });
     marker.addListener('mouseover', function(){
@@ -207,7 +212,11 @@ var initMap = function(){
   //   }
   // };
 
-  ko.applyBindings(new ViewModel(locations, map));
+  var teste = function(){
+    console.log('click');
+  }
+
+  // ko.applyBindings(viewModel);
 
 };
 // Tratamento de erro do Google Maps
