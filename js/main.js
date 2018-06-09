@@ -1,4 +1,4 @@
-// Array de marcadores
+// array de marcadores
 var markers = [];
 // dados locais
 var locations = [
@@ -28,12 +28,6 @@ var locations = [
       lng: -54.482524}
   },
   {
-    title: 'Parque dos Peixes',
-    location: {
-      lat: -25.613505,
-      lng: -54.482524}
-  },
-  {
     title: 'Cataratas do Iguaçu',
     location: {
       lat: -25.691719,
@@ -42,173 +36,159 @@ var locations = [
 ];
 
 var Location = function(data, marker) {
-  this.name = ko.observable(data.title);
+  this.title = ko.observable(data.title);
   this.location = ko.observable(data.location);
   this.marker = ko.observable(marker);
 };
-
-var ViewModel = function(locations, map){
-  var self = this;
-
-  // Arrays de lista e marcadores
-  self.locationList = ko.observableArray([]);
-  // Entrada do filtro
-  self.query = ko.observable('');
-  // Variaveis para tratamento das Informações
-  self.title = ko.observable();
-  self.wikiUrl = ko.observable();
-  self.article = ko.observable();
-  self.errorMessage = ko.observable();
-  self.wikiRequestTimeout = ko.observable();
-  // Popula o array com a lista dos locais
-  for (var i = 0; i < locations.length; i++) {
-    self.locationList()[i] = new Location(locations[i], markers[i]);
+// Personaliza os marcadores
+function makeMarkerIcon(markerColor) {
+    var markerImage = new google.maps.MarkerImage(
+      'http://chart.googleapis.com/chart?chst=d_map_spin&chld=1.15|0|'+ markerColor +
+      '|40|_|%E2%80%A2',
+      new google.maps.Size(21, 34),
+      new google.maps.Point(0, 0),
+      new google.maps.Point(10, 34),
+      new google.maps.Size(21,34));
+    return markerImage;
   }
-  // Filtra a lista
-  self.filter = ko.computed(function() {
-      var search = self.query().toLowerCase();
-      return ko.utils.arrayFilter(self.locationList(), function(location) {
-          return location.name().toLowerCase().indexOf(search) >= 0;
-      });
-  }, this);
-  // Trata as Informações sobre o local
-  self.filterMarkers = function(place) {
-    self.title(place.name());
-    self.wikiUrl('https://en.wikipedia.org/w/api.php?action=opensearch&search=' + self.title() + '&format=json&callback=wikiCallback')
-    // Focaliza no marcador filtrado
-    var bounds = new google.maps.LatLngBounds();
-    place.marker().setMap(map);
-    bounds.extend(place.marker().position);
-    map.fitBounds(bounds);
-    // Tratamento de erro
-    self.wikiRequestTimeout(setTimeout(function(){
-      self.errorMessage('Failed to get wikipedia resources!');
-    }, 8000));
+// Manipula animação dos marcadores
+function toggleBounce(marker) {
+  setTimeout(function(){marker.setAnimation(google.maps.Animation.BOUNCE)},1000);
+  setTimeout(function(){marker.setAnimation(null)}, 3000);
+}
+// Popula o infoWindow
+function populateInfoWindow(marker, infowindow) {
+  // Url da busca
+  var wikiUrl = 'https://wikipedia.org/w/api.php?action=opensearch&search=' + marker.title + '&format=json&callback=wikiCallback';
+  if (infowindow.marker != marker) {
+    infowindow.setContent('');
+    infowindow.marker = marker;
+    // Usa o setTimeout para tratamento de erros
+    var wikiRequestTimeout = setTimeout(function(){
+      infowindow.setContent('<div><p>Não foi possivel acessar dados do wikipedia!</p>,</div>');
+    }, 8000);
     // faz uma requisiçao ajax na API do wikipedia
     $.ajax({
-      url: self.wikiUrl(),
+      url: wikiUrl,
       dataType: "jsonp",
       success: function(response){
         var articleList = response[1];
+        // Resultado da busca
         if ($.isEmptyObject(articleList)) {
-          self.article('<li><p>A pesquisa não encontrou nenhum resultado!</p></li>');
+          infowindow.setContent('A pesquisa não encontrou nenhum resultado.');
         }else {
           for(var i = 0; i < articleList.length; i++){
             var articleStr = articleList[i];
-            var url = 'https://en.wikipedia.org/wiki/' + articleStr;
-            self.article('<li><a target="_blank" href="' + url + '">' + articleStr + '</a></li>');
+            var url = 'https://pt.wikipedia.org/wiki/' + articleStr;
+            infowindow.setContent('<div>'+marker.title+'</div>'+'<div><ul><li><a href=" ' +
+                                  url + '" target="_blank">' + articleStr + '</a></li></ul></div>');
           };
         }
-        clearTimeout(self.wikiRequestTimeout());
-      }
+        clearTimeout(wikiRequestTimeout);
+        }
+    });
+    infowindow.open(map, marker);
+    infowindow.addListener('closeclick', function(){
+      infowindow.marker = null;
     });
   }
-  // Mostra a lista toda
+};
+
+var ViewModel = function(map, infoWindow, defaultIcon, customIcon){
+  var self = this;
+  // Arrays de lista e marcadores
+  self.locationList = ko.observableArray([]);
+  self.filterList = ko.observableArray([]);
+  // Entrada do filtro
+  self.query = ko.observable('');
+  // preenche o array com os dados e marcadores
+  for (var i = 0; i < markers.length; i++) {
+    self.locationList()[i] = new Location(locations[i], markers[i]);
+    // Eventos dos marcadores
+    self.locationList()[i].marker().addListener('click', function() {
+      populateInfoWindow(this, infoWindow);
+    });
+    self.locationList()[i].marker().addListener('click', function() {
+      toggleBounce(this);
+    });
+    self.locationList()[i].marker().addListener('mouseover', function() {
+      this.setIcon(customIcon);
+    });
+    self.locationList()[i].marker().addListener('mouseout', function() {
+      this.setIcon(defaultIcon);
+    });
+  }
+  // Pega a entrada do input
+  self.getFilter = function(input) {
+    return ko.utils.arrayFilter(self.locationList(), function(location) {
+        return location.title().toLowerCase().indexOf(input) >= 0;
+    });
+  }
+  // Filtra a lista de acordo com a entrada de busca
+  self.filter = ko.computed(function() {
+      var search = self.query().toLowerCase();
+      var filter = self.getFilter(search);
+      self.filterList(filter);
+      return self.filterList();
+  }, this);
+  // Atualiza o mapa de acordo com o filtro
   self.showListings = function() {
-    var bounds = new google.maps.LatLngBounds();
-
-    for (var i = 0; i < self.locationList().length; i++) {
-      self.locationList()[i].marker().setMap(map);
-      bounds.extend(self.locationList()[i].marker().position);
+    for (var i = 0; i < self.locationList().length; i++) { // Esconde os marcadores
+      self.locationList()[i].marker().setMap(null);
     }
-
-    map.fitBounds(bounds);
+    for (var i = 0; i < self.locationList().length; i++) { // Mostra no mapa somente os marcadores do filtro
+      for (var j = 0; j < self.filterList().length; j++) {
+        if (self.locationList()[i].title() == self.filterList()[j].title()) {
+          self.locationList()[i].marker().setMap(map);
+        }
+      }
+    }
   };
+  // Manipula os eventos do menu dropdown
+  self.markerEvents = function(place) {
+    toggleBounce(place.marker());
+    place.marker().setIcon(customIcon);
+  };
+
+  self.MarkerMouseout = function(place) {
+    place.marker().setIcon(defaultIcon);
+  };
+  // Popula o infoWindow atraves do menu dropdown
+  self.searchInfo = function(place) {
+    populateInfoWindow(place.marker(), infoWindow);
+  }
 }
 // Inicia o mapa
 var initMap = function(){
   // Recursos do Maps
-  var largeInfowindow = new google.maps.InfoWindow();
+  var infoWindow = new google.maps.InfoWindow();
   var bounds = new google.maps.LatLngBounds();
   // Pesonaliza os marcadores
-  var defaultIcon = makeMarkerIcon('img/red.png');
-  var customIcon = makeMarkerIcon('img/blue.png');
+  var defaultIcon = makeMarkerIcon('f44336');
+  var customIcon = makeMarkerIcon('4caf50');
 
   var map = new google.maps.Map(document.getElementById('map'), {
     center: {lat:  -25.516336, lng: -54.585376},
     zoom: 15
   });
+  // Popula o array marker com os marcadores
+  locations.forEach(function(location) {
+      var marker = new google.maps.Marker({
+        position: location.location,
+        title: location.title,
+        map: map,
+        animation: google.maps.Animation.DROP,
+        icon: defaultIcon
+      });
 
-  for (var i = 0; i < locations.length; i++) {
-    var marker = new google.maps.Marker({
-      position: locations[i].location,
-      title: locations[i].title,
-      map: map,
-      animation: google.maps.Animation.DROP,
-      icon: defaultIcon
-    });
-    // Alimenta o array com marcadores
-    markers.push(marker);
+      bounds.extend(marker.position);
 
-    bounds.extend(marker.position);
-    // Eventos
-    marker.addListener('click', function(){
-      // ViewModel.filterMarkers();
-      // populateInfoWindow(this, largeInfowindow);
-    });
-    marker.addListener('mouseover', function(){
-      this.setIcon(customIcon);
-    });
-    marker.addListener('mouseout', function(){
-      this.setIcon(defaultIcon);
-    });
-  }
+      markers.push(marker);
+  });
 
   map.fitBounds(bounds);
-  // Manipula as cores dos marcadores
-  function makeMarkerIcon(img) {
-    var markerImage = new google.maps.MarkerImage(img);
-    return markerImage;
-  };
 
-  // function showListings() {
-  //   var bounds = new google.maps.LatLngBounds();
-  //   // Extend the boundaries of the map for each marker and display the marker
-  //   for (var i = 0; i < markers.length; i++) {
-  //     markers[i].setMap(map);
-  //     bounds.extend(markers[i].position);
-  //   }
-  //   map.fitBounds(bounds);
-  // }
-
-  // var populateInfoWindow = function(marker, infowindow) {
-  //   // Url da busca
-  //   var wikiUrl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search=' + marker.title + '&format=json&callback=wikiCallback';
-  //   if (infowindow.marker != marker) {
-  //     infowindow.marker = marker;
-  //     // Usa o setTimeout para tratamento de erros
-  //     var wikiRequestTimeout = setTimeout(function(){
-  //       infowindow.setContent('<div><p>Não foi possivel acessar dados do wikipedia!</p>,</div>');
-  //     }, 8000);
-  //     // faz uma requisiçao ajax na API do wikipedia
-  //     $.ajax({
-  //       url: wikiUrl,
-  //       dataType: "jsonp",
-  //       success: function(response){
-  //         var articleList = response[1];
-  //         // Resultado da busca
-  //         if ($.isEmptyObject(articleList)) {
-  //           infowindow.setContent('A pesquisa não encontrou nenhum resultado.');
-  //         }else {
-  //           for(var i = 0; i < articleList.length; i++){
-  //             var articleStr = articleList[i];
-  //             var url = 'https://en.wikipedia.org/wiki/' + articleStr;
-  //             infowindow.setContent('<div>'+marker.title+'</div>'+'<div><ul><li><a href=" ' +
-  //                                   url + '" target="_blank">' + articleStr + '</a></li></ul></div>');
-  //           };
-  //         }
-  //         clearTimeout(wikiRequestTimeout);
-  //         }
-  //     });
-  //     infowindow.open(map, marker);
-  //     infowindow.addListener('closeclick', function(){
-  //       infowindow.marker = null;
-  //     });
-  //   }
-  // };
-
-  ko.applyBindings(new ViewModel(locations, map));
-
+  ko.applyBindings(new ViewModel(map, infoWindow, defaultIcon, customIcon));
 };
 // Tratamento de erro do Google Maps
 var googleError = function() {
